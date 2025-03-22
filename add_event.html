@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="logo.png" type="image/x-icon" />
+    <title>Add Event - Event Master</title>
+  </head>
+  <body>
+    <header>
+      <div class="logo">
+        <img src="logo.png" alt="Event Master Logo" />
+        <h1>Event Master</h1>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="disp_event.html">Display Events</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <div class="container add">
+        <h2>Add Event</h2>
+        <form id="eventForm">
+          <label for="event_name">Event Name</label>
+          <input type="text" id="event_name" required />
+
+          <label for="event_date">Date</label>
+          <input type="date" id="event_date" required />
+
+          <label for="event_time">Time</label>
+          <input type="time" id="event_time" required />
+
+          <label for="event_description">Description</label>
+          <textarea id="event_description" rows="4" required></textarea>
+
+          <button type="submit">Submit</button>
+        </form>
+      </div>
+    </main>
+
+    <script>
+      document.getElementById("eventForm").addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const newEvent = {
+          id: Date.now(),
+          name: document.getElementById("event_name").value,
+          date: document.getElementById("event_date").value,
+          time: document.getElementById("event_time").value,
+          description: document.getElementById("event_description").value,
+        };
+
+        let events = JSON.parse(localStorage.getItem("events")) || [];
+        events.push(newEvent);
+        localStorage.setItem("events", JSON.stringify(events));
+
+        window.location.href = "disp_event.html";
+      });
+    </script>
+  </body>
+</html>

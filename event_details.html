@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Event Details - Event Master</title>
+  <link rel="icon" href="logo.png" type="image/x-icon">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <header>
+    <div class="logo">
+      <img src="logo.png" alt="Event Master Logo">
+      <h1>Event Master</h1>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="./index.html#about">About</a></li>
+        <li><a href="add_event.html">Add Event</a></li>
+        <li><a href="disp_event.html">Display Events</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <div class="container details">
+      <h2>Event Details</h2>
+      <div id="eventDetails"></div>
+      <button onclick="editEvent(event)">Edit Event</button>
+      <button onclick="window.location.href = 'disp_event.html'">Back to Events</button>
+    </div>
+
+  </main>
+
+  <script>
+    const selectedEvent = JSON.parse(localStorage.getItem('selectedEvent'));
+    console.log('Selected Event:', selectedEvent);
+
+
+    function populateEventDetails(event) {
+      const eventDetailsContainer = document.getElementById('eventDetails');
+
+      const markup = `
+        <p><strong>Event Name:</strong> ${event.event_name}</p>
+        <p><strong>Event Date:</strong> ${event.event_date}</p>
+        <p><strong>Event Time:</strong> ${convertTo12HourFormat(event.event_time)}</p>
+        <p><strong>Event Description:</strong> ${event.event_description}</p>
+      `;
+
+      eventDetailsContainer.innerHTML = markup;
+    }
+
+
+    if (selectedEvent && Object.keys(selectedEvent).length !== 0) {
+      populateEventDetails(selectedEvent);
+    } else {
+      document.getElementById('eventDetails').innerText = 'No event details found.';
+    }
+
+    function convertTo12HourFormat(time) {
+      let [hours, minutes] = time.split(':');
+      const suffix = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12 || 12;
+      return `${hours}:${minutes} ${suffix}`;
+    }
+
+    function editEvent(event) {
+      localStorage.setItem('editEvent', JSON.stringify(selectedEvent));
+      window.location.href = 'add_event.html';
+      deleteEvent(event);
+    }
+
+    function deleteEvent(event) {
+      const events = JSON.parse(localStorage.getItem('events')) || [];
+      const index = events.findIndex((e) => e.event_name === selectedEvent.event_name);
+      events.splice(index, 1);
+      localStorage.setItem('events', JSON.stringify(events));
+    }
+  </script>
+</body>
+
+</html>

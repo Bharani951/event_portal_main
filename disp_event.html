@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="logo.png" type="image/x-icon" />
+    <title>Display Events - Event Master</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+      }
+      .container {
+        width: 80%;
+        margin: 20px auto;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+      }
+      h2 {
+        text-align: center;
+        color: #333;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+      th,
+      td {
+        padding: 12px;
+        text-align: center;
+        border-bottom: 1px solid #ddd;
+      }
+      th {
+        background: #007bff;
+        color: white;
+      }
+      tr:nth-child(even) {
+        background: #f9f9f9;
+      }
+      button {
+        padding: 8px 12px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin: 2px;
+      }
+      .delete-btn {
+        background-color: #dc3545;
+        color: white;
+      }
+      .delete-btn:hover {
+        background-color: #c82333;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div
+        class="logo"
+        style="
+          text-align: center;
+          padding: 20px;
+          background: #007bff;
+          color: white;
+        "
+      >
+        <h1>Event Master</h1>
+      </div>
+    </header>
+
+    <main>
+      <div class="container disp">
+        <h2>Upcoming Events</h2>
+        <table id="eventTable">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Time</th>
+              <th>Event</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="eventBody"></tbody>
+        </table>
+      </div>
+    </main>
+
+    <script>
+      function loadEvents() {
+        const events = JSON.parse(localStorage.getItem("events")) || [];
+        const eventBody = document.getElementById("eventBody");
+        eventBody.innerHTML = "";
+
+        events.forEach((event) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${event.date}</td>
+            <td>${event.time}</td>
+            <td>${event.name}</td>
+            <td>
+              <button class="delete-btn" onclick="deleteEvent(${event.id})">Delete</button>
+            </td>
+          `;
+          eventBody.appendChild(row);
+        });
+      }
+
+      function deleteEvent(eventId) {
+        let events = JSON.parse(localStorage.getItem("events")) || [];
+        events = events.filter((event) => event.id !== eventId);
+        localStorage.setItem("events", JSON.stringify(events));
+        loadEvents();
+      }
+
+      loadEvents();
+    </script>
+  </body>
+</html>
